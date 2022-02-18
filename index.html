@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Analytics</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .chartCard {
+        width: 100vw;
+        height: calc(100vh - 40px);
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chartBox {
+        width: 1000px;
+        padding: 20px;
+        border-radius: 20px;
+        border: solid 3px rgb(255, 255, 255);
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chartCard">
+      <div class="chartBox">
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+    <script>
+      // setup
+      const dash = (ctx, value) => (ctx.p0DataIndex > 12 ? value : [6, 0]);
+      const data = {
+        labels: [
+          "Jan 19",
+          "Jan 21",
+          "Jan 23",
+          "Jan 25",
+          "Jan 27",
+          "Jan 29",
+          "Jan 31",
+          "Feb 02",
+          "Feb 04",
+          "Feb 06",
+          "Feb 08",
+          "Feb 10",
+          "Feb 11",
+          "Feb 13",
+          "Feb 15",
+          "Feb 17",
+        ],
+        datasets: [
+          {
+            label: "Total Orders",
+            data: [
+              29, 44, 43, 27, 33, 29, 30, 34, 32, 29, 45, 29, 30, 25, 26, 27,
+            ],
+            backgroundColor: ["#CD5C5C"],
+            borderColor: ["#CD5C5C"],
+            segment: {
+              borderDash: (ctx) => dash(ctx, [6, 6]) || [6, 6],
+            },
+            borderWidth: 1,
+            yAxisID: "y",
+          },
+          {
+            label: "Total Orders Cleared",
+            data: [
+              29, 33, 32, 30, 31, 30, 32, 30, 31, 31, 32, 31, 32, 31, 30, 31,
+            ],
+            backgroundColor: ["#FF0000"],
+            borderColor: ["#FF0000"],
+            borderWidth: 3,
+            pointRadius: 0,
+            tension: 0.4,
+            yAxisID: "y",
+          },
+          {
+            label: "Returns",
+            data: [
+              0, 15, 13, 17, 16, 15, 14, 15, 14, 13, 13, 12, 10, 10, 11, 10,
+            ],
+            backgroundColor: ["#7B68EE"],
+            borderColor: ["#7B68EE"],
+            borderWidth: 3,
+            pointRadius: 0,
+            tension: 0.4,
+            yAxisID: "y",
+          },
+          {
+            label: "Returned Units",
+            data: [0, 29, 0, 29, 29, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0],
+            backgroundColor: ["#7B68EE"],
+            borderColor: ["#7B68EE"],
+            borderWidth: 1,
+            yAxisID: "y",
+          },
+        ],
+      };
+
+      //customTooltip block
+      const customTooltip = {
+        id: "customTooltip",
+        afterDraw(chart) {
+          const {
+            ctx,
+            chartArea: {
+              top,
+              bottom,
+              left,
+              right,
+              width,
+              height,
+              tooltip,
+              scales: { x, y },
+            },
+          } = chart;
+        },
+      };
+
+      // config
+      const config = {
+        type: "line",
+        data,
+        options: {
+          interaction: {
+            mode: "index",
+          },
+          hoverBackgroundColor: "white",
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          pointHoverBorderWidth: 3,
+          pointHitRadius: 50,
+          scales: {
+            y: {
+              beginAtZero: true,
+              type: "linear",
+              position: "left",
+            },
+			percentage: {
+              beginAtZero: true,
+              type: "linear",
+              position: "right",
+            },
+          },
+        },
+        plugin: [customTooltip],
+      };
+
+      // render init block
+      const myChart = new Chart(document.getElementById("myChart"), config);
+    </script>
+  </body>
+</html>
